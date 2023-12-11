@@ -6,9 +6,9 @@ export interface RouteGuardProps {
 }
 
 export default function RouteGuard({component}: RouteGuardProps) {
-    const { isAuthenticated } = useContext(SecurityContext)
+    const { is_authenticated } = useContext(SecurityContext)
 
-    if(isAuthenticated()) {
+    if(is_authenticated()) {
         return component;
     } else {
         return ( <h1>Not Authenticated </h1> )

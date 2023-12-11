@@ -1,9 +1,9 @@
 import { For } from "solid-js";
-import { useLocations } from "../hooks/useLocations";
+import { use_locations } from "../hooks/useLocations";
 
 
 export function Locations() {
-    const { locations } = useLocations(); 
+    const { locations } = use_locations(); 
     return(
         <>
             <p>this is the Locations</p>

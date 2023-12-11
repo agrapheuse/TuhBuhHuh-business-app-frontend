@@ -1,6 +1,6 @@
 import Keycloak from "keycloak-js"
 import { Show, createEffect, createSignal } from "solid-js";
-import { addAccessTokenToAuthHeader, removeAccessTokenFromAuthHeader } from "../services/auth";
+import {  add_access_token_to_auth_header, remove_access_token_from_auth_header } from "../services/auth";
 import SecurityContext from "./securityContext";
 import { jwtDecode } from "jwt-decode";
 
@@ -12,8 +12,8 @@ const keycloakConfig = {
 const keycloak: Keycloak = new Keycloak(keycloakConfig);
 
 export default function SecurityContextProvider(props) {
-    const [isLoggedIn, setIsLoggedIn] = createSignal(null);
-    const [loggedInUser, setLoggedInUser] = createSignal('');
+    const [is_logged_in, set_is_logged_in] = createSignal(null);
+    const [logged_in_user, set_logged_in_user] = createSignal('');
 
     createEffect(() => {
         try {
@@ -24,29 +24,29 @@ export default function SecurityContextProvider(props) {
     });
 
     keycloak.onAuthSuccess = () => {
-        addAccessTokenToAuthHeader(keycloak.token);
-        setLoggedInUser(keycloak.idTokenParsed?.name);
-        setIsLoggedIn(true);
+        add_access_token_to_auth_header(keycloak.token);
+        set_logged_in_user(keycloak.idTokenParsed?.name);
+        set_is_logged_in(true);
     }
 
     keycloak.onAuthLogout = () => {
-        removeAccessTokenFromAuthHeader();
+        remove_access_token_from_auth_header();
     }
     keycloak.onAuthError = () => {
-        removeAccessTokenFromAuthHeader();
+        remove_access_token_from_auth_header();
     }
     keycloak.onTokenExpired = () => {
         keycloak.updateToken(-1).then(function() {
-            addAccessTokenToAuthHeader(keycloak.token);
-            setLoggedInUser(keycloak.idTokenParsed?.name);
+            add_access_token_to_auth_header(keycloak.token);
+            set_logged_in_user(keycloak.idTokenParsed?.name);
         });
     }
 
     function logout() {
-        const logoutOptions = { redirectUri: import.meta.env.VITE_SOLID_APP_URL };
-        keycloak.logout(logoutOptions);
+        const logout_options = { redirectUri: import.meta.env.VITE_SOLID_APP_URL };
+        keycloak.logout(logout_options);
     }
-    function isExpired(token) {
+    function is_expired(token: string) {
         const decoded = jwtDecode(token);
 
         if(decoded.exp >= Date.now()){
@@ -54,20 +54,20 @@ export default function SecurityContextProvider(props) {
         }
         return false;
     }
-    function isAuthenticated() {
+    function is_authenticated() {
         if (keycloak.token) {
-            return !isExpired(keycloak.token);
+            return !is_expired(keycloak.token);
         }
         return false;
     }
     
     return (
         <>
-            <Show when={isLoggedIn()}>
+            <Show when={is_logged_in()}>
                 <SecurityContext.Provider
                     value={{
-                        isAuthenticated,
-                        loggedInUser,
+                        is_authenticated,
+                        logged_in_user,
                         logout,
                     }}
                 >
