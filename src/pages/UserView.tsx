@@ -1,5 +1,8 @@
 import { For, Match, Show, Signal, Switch, createContext, createSignal, useContext } from "solid-js";
-import { use_user } from "../hooks/useUser";
+import { unsubscribe_from_location, update_threshold, use_user } from "../hooks/useUser";
+import { use_location } from "../hooks/useLocations";
+import { subscribe_to_location_request, unsubscribe_from_location_request } from "../services/api/user";
+import { document } from "postcss";
 
 export default function UserView() {
     const [userPage, setUserPage] = createSignal("profile");
@@ -121,9 +124,45 @@ function Profile() {
     )
 }
 interface UserThresholdProps {
+    threshold: string;
+    value: number;
+}
+function UserThreshold({ threshold, value }: UserThresholdProps) {
+    const [thresholdValue, setThresholdValue] = createSignal(value);
+    const thresholdMutation = update_threshold();
+
+    return (
+        <div class="sm:col-span-4">
+            <label for={threshold} class="block text-sm font-medium leading-6 text-gray-900">{threshold}</label>
+            <div class="mt-2">
+                <div
+                    class="
+                                    flex rounded-md shadow-sm ring-1 ring-inset 
+                                    ring-gray-300 focus-within:ring-2 
+                                    focus-within:ring-inset focus-within:ring-indigo-600 
+                                    sm:max-w-md
+                                "
+                >
+                    <input type="range" name={threshold} id={threshold}
+                        value={thresholdValue() || 0} min="1" max="100"
+                        oninput={(e) => setThresholdValue(parseInt(e.currentTarget.value))}
+                        onchange={() => thresholdMutation.mutate({threshold:threshold, value:thresholdValue()})}
+                        class="
+                                        block flex-1 border-0 bg-transparent 
+                                        py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 
+                                        focus:ring-0 sm:text-sm sm:leading-6
+                                    "
+                    />
+                    <output>{thresholdValue()}</output>
+                </div>
+            </div>
+        </div>
+    )
+}
+interface UserThresholdsProps {
     thresholds: Map<String, number>;
 }
-function UserThresholds({ thresholds }: UserThresholdProps) {
+function UserThresholds({ thresholds }: UserThresholdsProps) {
     const valueTypes = ["TEMPERATURE", "HUMIDITY", "PM10", "PM25", "OZONE"];
     return (
         <div class="max-width-800 left-50">
@@ -134,58 +173,94 @@ function UserThresholds({ thresholds }: UserThresholdProps) {
 
             <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
                 <For each={valueTypes}>{(valueType) =>
-                    <div class="sm:col-span-4">
-                        <label for={valueType} class="block text-sm font-medium leading-6 text-gray-900">{valueType}</label>
-                        <div class="mt-2">
-                            <div
-                                class="
-                                    flex rounded-md shadow-sm ring-1 ring-inset 
-                                    ring-gray-300 focus-within:ring-2 
-                                    focus-within:ring-inset focus-within:ring-indigo-600 
-                                    sm:max-w-md
-                                "
-                            >
-                                <input
-                                    type="number" name={valueType} id={valueType}
-                                    class="
-                                        block flex-1 border-0 bg-transparent 
-                                        py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 
-                                        focus:ring-0 sm:text-sm sm:leading-6
-                                    "
-                                    value={thresholds[valueType]}
-                                />
-                            </div>
-                        </div>
-                    </div>
-
+                   <UserThreshold threshold={valueType} value={thresholds[valueType]}/> 
                 }</For>
             </div>
             <div class="mt-6 flex items-center justify-end gap-x-6">
-                <button type="submit" 
-                    class="
-                        rounded-md bg-indigo-600 px-3 py-2 text-sm 
-                        font-semibold text-white shadow-sm hover:bg-indigo-500 
-                        focus-visible:outline focus-visible:outline-2 
-                        focus-visible:outline-offset-2 
-                        focus-visible:outline-indigo-600
-                    "
-                >
-                    Update
-                </button>
+                
             </div>
         </div>
+    )
+}
+
+interface MeasurementProps {
+    type: string;
+    measurement: string;
+}
+function Measurement({ type, measurement }: MeasurementProps) {
+    return (
+        <div class="">
+            <span class="px-5">{type}:</span>
+            <span>{measurement}</span>
+        </div>
+
+    )
+}
+
+interface UserLocationsProp {
+    location: string;
+}
+function UserLocation({ location }: UserLocationsProp) {
+    const locationMutation = unsubscribe_from_location()
+    const locationQuery = use_location(location);
+    const valueTypes = ["TEMPERATURE", "HUMIDITY", "PM10", "PM25", "OZONE"];
+    return (
+        <Switch>
+            <Match when={locationQuery.isSuccess} >
+                <div
+                    class="
+                        flex rounded-lg max-w-75 bg-gray-50 border-2 
+                        border-gray-800 m-10 p-5
+                    ">
+                    <div
+                        class="
+                            rounded-md bg-gray-800 w-16 h-16 rotate-45
+                        ">
+                        &nbsp;
+                    </div>
+                    <div
+                        class="
+                            p-5
+                        ">
+                        <p>{locationQuery.data.uuid}</p>
+                        <div
+                            class="
+                                flex
+                            ">
+                            <Measurement
+                                type="PM10"
+                                measurement={locationQuery.data.measurements.PM10}
+                            />
+                            <Measurement
+                                type="PM25"
+                                measurement={locationQuery.data.measurements.PM25}
+                            />
+                            <Measurement
+                                type="Ozone"
+                                measurement={locationQuery.data.measurements.OZONE}
+                            />
+                        </div>
+                    </div>
+                    <div>
+                        <button onclick={() => locationMutation.mutate(locationQuery.data.uuid)}>Unsubscribe</button>
+                    </div>
+                </div>
+            </Match>
+        </Switch>
     )
 }
 interface UserLocationsProps {
     locations: Array<Location>;
 }
 function UserLocations({ locations }: UserLocationsProps) {
+    console.log(locations);
     return (
         <div >
+            <h1>Subscribed Locations</h1>
             <ul>
-                <For each={locations}>{(location, i) =>
+                <For each={locations}>{(location) =>
                     <li>
-                        <p>{i() + 1}: {location.uuid}</p>
+                        <UserLocation location={location.uuid} />
                     </li>
                 }</For>
             </ul>

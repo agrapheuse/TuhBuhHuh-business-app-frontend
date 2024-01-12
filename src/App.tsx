@@ -4,11 +4,9 @@ import { Router, Routes, Route } from '@solidjs/router';
 import { QueryClient, QueryClientProvider } from '@tanstack/solid-query';
 import SecurityContextProvider from './context/SecurityContextProvider';
 import RouteGuard from './components/RouteGuard';
-import Dashboard from './pages/Dashboard';
 import { DataMapView } from './pages/DataMap';
 import { Header } from './components/Header';
 import UserView from './pages/UserView';
-import UserContextProvider from './context/UserContextProvider';
 
 const query_client = new QueryClient();
 
