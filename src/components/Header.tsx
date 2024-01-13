@@ -10,7 +10,7 @@ export const Header: Component = () => {
         ">
             <nav class="flex justify-between gap-3">
                 <A href="/">Map</A>
-                <A href="/dashboard">Dashboard</A>
+                <A href="/settings">Settings</A>
             </nav>
             <AuthHeader /> 
         </header>

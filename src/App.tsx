@@ -4,9 +4,9 @@ import { Router, Routes, Route } from '@solidjs/router';
 import { QueryClient, QueryClientProvider } from '@tanstack/solid-query';
 import SecurityContextProvider from './context/SecurityContextProvider';
 import RouteGuard from './components/RouteGuard';
-import Dashboard from './pages/Dashboard';
 import { DataMapView } from './pages/DataMap';
 import { Header } from './components/Header';
+import UserView from './pages/UserView';
 
 const query_client = new QueryClient();
 
@@ -20,8 +20,8 @@ const App: Component = () => {
                     <Route path="/" element={
                         <RouteGuard component={DataMapView} />
                     } />
-                    <Route path="/dashboard" element={
-                        <RouteGuard component={Dashboard} />
+                    <Route path="/settings" element={
+                        <RouteGuard component={UserView} />
                     } />
                 </Routes>
             </SecurityContextProvider>

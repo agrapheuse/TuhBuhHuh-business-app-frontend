@@ -13,7 +13,6 @@ const keycloak: Keycloak = new Keycloak(keycloakConfig);
 
 export default function SecurityContextProvider(props) {
     const [is_logged_in, set_is_logged_in] = createSignal(null);
-    const [logged_in_user, set_logged_in_user] = createSignal('');
 
     createEffect(() => {
         try {
@@ -25,7 +24,6 @@ export default function SecurityContextProvider(props) {
 
     keycloak.onAuthSuccess = () => {
         add_access_token_to_auth_header(keycloak.token);
-        set_logged_in_user(keycloak.idTokenParsed?.name);
         set_is_logged_in(true);
     }
 
@@ -38,7 +36,6 @@ export default function SecurityContextProvider(props) {
     keycloak.onTokenExpired = () => {
         keycloak.updateToken(-1).then(function() {
             add_access_token_to_auth_header(keycloak.token);
-            set_logged_in_user(keycloak.idTokenParsed?.name);
         });
     }
 
@@ -67,7 +64,6 @@ export default function SecurityContextProvider(props) {
                 <SecurityContext.Provider
                     value={{
                         is_authenticated,
-                        logged_in_user,
                         logout,
                     }}
                 >

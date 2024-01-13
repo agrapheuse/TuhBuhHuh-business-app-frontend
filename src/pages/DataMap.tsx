@@ -53,7 +53,7 @@ function DataMap() {
         grid.set_on_clicks(set_location_open);
 
         return grid;
-    };
+    }; 
 
     onMount(async () => {
         grid_resource = createResource(create_grid)[0];
