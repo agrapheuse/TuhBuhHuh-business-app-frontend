@@ -86,6 +86,7 @@ export class Location {
     readonly uuid: string;
     readonly topLeft: google.maps.LatLng;
     readonly bottomRight: google.maps.LatLng;
+    readonly subbed: boolean;
 
     rectangle: google.maps.Rectangle | null;
 
@@ -94,7 +95,8 @@ export class Location {
         latStart: number,
         longStart: number,
         latEnd: number,
-        longEnd: number
+        longEnd: number,
+        subbed: boolean
     ) {
         this.uuid = uuid;
         this.topLeft = new google.maps.LatLng(
@@ -103,6 +105,7 @@ export class Location {
         this.bottomRight = new google.maps.LatLng(
             latEnd, longEnd
         );
+        this.subbed = subbed;
     }
 
     get_edges(): google.maps.LatLngBoundsLiteral {
@@ -115,10 +118,12 @@ export class Location {
     }
 
     draw_rectangle(map: google.maps.Map): void {
+        var fillColor = `#8932a8`;
+        if(this.subbed) fillColor = `#fc4c00`;
         this.rectangle = new google.maps.Rectangle({
             bounds: this.get_edges(),
             strokeWeight: 0,
-            fillColor: `#${Math.floor(Math.random()*16777215).toString(16)}`,
+            fillColor: fillColor,
             fillOpacity: 0.5,
             clickable: true
         });

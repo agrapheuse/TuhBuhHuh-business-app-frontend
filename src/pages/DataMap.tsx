@@ -66,13 +66,13 @@ function DataMap() {
         <div
             classList={{ hidden: !location_open() }}
             class="
-                    absolute top-0 left-0 h-full w-full bg-slate-700/50 z-10
-                    flex justify-center items-center
+                    fixed mt-14 top-50 left-0 z-40 w-2/5 h-screen 
+                    transition-transform-translate-x-full sm:translate-x-0
                 "
         >
             <div class="
-                    flex justify-center items-center flex-col bg-white p-8 m-2
-                    rounded-lg
+                    h-full px-3 py-4 overflow-y-auto bg-white 
+                    dark:bg-gray-800
                 ">
                 <LocationView location_signal={location_open_signal} />
             </div>

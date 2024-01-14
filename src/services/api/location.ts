@@ -5,6 +5,7 @@ class LocationDto {
     topLeft: google.maps.LatLng;
     bottomRight: google.maps.LatLng;
     measurements: string;
+    subbed: boolean;
 }
 
 const LOCATIONS_URL = import.meta.env.VITE_BACKEND_URL + '/locations';
@@ -20,10 +21,13 @@ export async function get_location(location_uuid: string): Promise<LocationDto> 
     const response = await axios.get(url);
     return response.data as LocationDto;
 }
-
 export async function get_location_historical(location_uuid: string): Promise<string> {
     const url = `${LOCATIONS_URL}/${location_uuid}/historical`;
     const response = await axios.get(url);
-    console.log(response.data);
-    return "hello"
+    return response.data;
+}
+export async function get_location_snapshot(location_uuid: string): Promise<string> {
+    const url = `${LOCATIONS_URL}/${location_uuid}/snapshot`;
+    const response = await axios.get(url);
+    return response.data;
 }

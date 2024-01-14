@@ -1,5 +1,8 @@
+import axios from "axios";
 import { Grid, Location } from "../model/grid";
 import { Loader } from "@googlemaps/js-api-loader";
+
+const LOCATIONS_URL = import.meta.env.VITE_BACKEND_URL + '/locations';
 
 export async function initMap(
     container: HTMLDivElement,
@@ -39,15 +42,15 @@ export async function initMap(
 }
 
 async function getGrid(lib: google.maps.MapsLibrary): Promise<Grid> {
-    const response = await fetch("/grid.json");
-    const json = await response.json();
-    const squares: Array<Location> = json
+    const response = await axios.get(LOCATIONS_URL);
+    const squares: Array<Location> = response.data
         .map((e) => new Location(
             e.uuid,
-            e.latStart,
-            e.longStart,
-            e.latEnd,
-            e.longEnd
+            e.bottomRight.lat,
+            e.bottomRight.lng,
+            e.topLeft.lat,
+            e.topLeft.lng,
+            e.subbed,
         ));
 
     let grid = new Grid(squares , lib)
