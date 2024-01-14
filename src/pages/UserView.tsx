@@ -3,6 +3,10 @@ import { unsubscribe_from_location, update_threshold, use_user, use_user_anomali
 import { use_location } from "../hooks/useLocations";
 import { subscribe_to_location_request, unsubscribe_from_location_request } from "../services/api/user";
 import { document } from "postcss";
+import { UserThresholds } from "./userviews/UserThresholds";
+import { Profile } from "./userviews/UserProfile";
+import { UserLocations } from "./userviews/UserLocations";
+import { UserNotifications } from "./userviews/UserNotifications";
 
 export default function UserView() {
     const [userPage, setUserPage] = createSignal("profile");
@@ -56,13 +60,19 @@ function UserContent() {
                         <Match when={userPage() == "thresholds"}>
                             <UserThresholds thresholds={userQuery.data.thresholds} />
                         </Match>
+                        <Match when={userPage() == "notifications"}>
+                            <UserNotifications
+                                currentNotifications={userQuery.data.currentNotifications}
+                                predictedNotifications={userQuery.data.predictedNotifications}
+                            />
+                        </Match>
                         <Match when={userPage() == "anomalies"}>
                             <UserAnomalies />
                         </Match>
                     </Switch>
-                </Match>
-            </Switch>
-        </div>
+                </Match >
+            </Switch >
+        </div >
     )
 }
 
@@ -72,20 +82,20 @@ function UserSidebar() {
     return (
         <aside
             class="
-                    fixed top-50 left-0 z-40 w-64 h-screen 
+                    fixed top-50 left-0 z-40 w-64 h-screen
                     transition-transform-translate-x-full sm:translate-x-0
                 "
             aria-label="Sidebar"
         >
-            <div class="h-full px-3 py-4 overflow-y-auto bg-gray-50 
+            <div class="h-full px-3 py-4 overflow-y-auto bg-gray-50
                     dark:bg-gray-800
                     "
             >
                 <ul class="space-y-2 font-medium">
                     <li>
                         <a href="#" onClick={() => setUserPage("profile")} class="
-                                flex items-center p-2 text-gray-900 rounded-lg 
-                                dark:text-white hover:bg-gray-100 
+                                flex items-center p-2 text-gray-900 rounded-lg
+                                dark:text-white hover:bg-gray-100
                                 dark:hover:bg-gray-700 group
                                 "
                         >
@@ -94,8 +104,8 @@ function UserSidebar() {
                     </li>
                     <li>
                         <a href="#" onClick={() => setUserPage("locations")} class="
-                                flex items-center p-2 text-gray-900 rounded-lg 
-                                dark:text-white hover:bg-gray-100 
+                                flex items-center p-2 text-gray-900 rounded-lg
+                                dark:text-white hover:bg-gray-100
                                 dark:hover:bg-gray-700 group
                             "
                         >
@@ -104,8 +114,8 @@ function UserSidebar() {
                     </li>
                     <li>
                         <a href="#" onClick={() => setUserPage("thresholds")} class="
-                                flex items-center p-2 text-gray-900 rounded-lg 
-                                dark:text-white hover:bg-gray-100 
+                                flex items-center p-2 text-gray-900 rounded-lg
+                                dark:text-white hover:bg-gray-100
                                 dark:hover:bg-gray-700 group
                             "
                         >
@@ -113,9 +123,19 @@ function UserSidebar() {
                         </a>
                     </li>
                     <li>
+                        <a href="#" onClick={() => setUserPage("notifications")} class="
+                                flex items-center p-2 text-gray-900 rounded-lg
+                                dark:text-white hover:bg-gray-100
+                                dark:hover:bg-gray-700 group
+                            "
+                        >
+                            <span class="ms-3">Notifications</span>
+                        </a>
+                    </li>
+                    <li>
                         <a href="#" onClick={() => setUserPage("anomalies")} class="
-                                flex items-center p-2 text-gray-900 rounded-lg 
-                                dark:text-white hover:bg-gray-100 
+                                flex items-center p-2 text-gray-900 rounded-lg
+                                dark:text-white hover:bg-gray-100
                                 dark:hover:bg-gray-700 group
                             "
                         >
@@ -147,7 +167,7 @@ function UserAnomalies() {
                 <For each={user_anomalies_query.data}>{(anomaly) =>
                     <div
                         class="
-                        flex rounded-lg max-w-75 bg-gray-50 border-2 
+                        flex rounded-lg max-w-75 bg-gray-50 border-2
                         border-gray-800 m-10 p-5
                     ">
                         <div
@@ -165,7 +185,7 @@ function UserAnomalies() {
                                 class="
                                 flex
                             ">
-                                
+
                             </div>
                         </div>
                     </div>
@@ -189,9 +209,9 @@ function UserThreshold({ threshold, value }: UserThresholdProps) {
             <div class="mt-2">
                 <div
                     class="
-                                    flex rounded-md shadow-sm ring-1 ring-inset 
-                                    ring-gray-300 focus-within:ring-2 
-                                    focus-within:ring-inset focus-within:ring-indigo-600 
+                                    flex rounded-md shadow-sm ring-1 ring-inset
+                                    ring-gray-300 focus-within:ring-2
+                                    focus-within:ring-inset focus-within:ring-indigo-600
                                     sm:max-w-md
                                 "
                 >
@@ -200,8 +220,8 @@ function UserThreshold({ threshold, value }: UserThresholdProps) {
                         oninput={(e) => setThresholdValue(parseInt(e.currentTarget.value))}
                         onchange={() => thresholdMutation.mutate({ threshold: threshold, value: thresholdValue() })}
                         class="
-                                        block flex-1 border-0 bg-transparent 
-                                        py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 
+                                        block flex-1 border-0 bg-transparent
+                                        py-1.5 pl-1 text-gray-900 placeholder:text-gray-400
                                         focus:ring-0 sm:text-sm sm:leading-6
                                     "
                     />
@@ -261,7 +281,7 @@ function UserLocation({ location }: UserLocationsProp) {
             <Match when={locationQuery.isSuccess} >
                 <div
                     class="
-                        flex rounded-lg max-w-75 bg-gray-50 border-2 
+                        flex rounded-lg max-w-75 bg-gray-50 border-2
                         border-gray-800 m-10 p-5
                     ">
                     <div
