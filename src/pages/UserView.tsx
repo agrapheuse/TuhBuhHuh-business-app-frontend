@@ -61,7 +61,10 @@ function UserContent() {
                             <UserThresholds thresholds={userQuery.data.thresholds} />
                         </Match>
                         <Match when={userPage() == "notifications"}>
-                            <UserNotifications notifications={userQuery.data.notifications}/>
+                            <UserNotifications 
+                                currentNotifications={userQuery.data.currentNotifications}
+                                predictedNotifications={userQuery.data.predictedNotifications}
+                            />
                         </Match>
                     </Switch>
                 </Match>

@@ -1,9 +1,5 @@
 export enum ValueType {
-    TEMPERATURE = 0,
-    HUMIDITY = 1,
-    PM10 = 2,
-    PM25 = 3,
-    CAR = 4
+    TEMPERATURE, HUMIDITY, PM10, PM25, OZONE, CAR, HEAVY, BIKE, PEDESTRIAN, V85
 }
 
 export interface Notification {
