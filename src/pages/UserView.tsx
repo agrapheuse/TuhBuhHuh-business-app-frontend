@@ -1,5 +1,5 @@
 import { For, Match, Show, Signal, Switch, createContext, createSignal, useContext } from "solid-js";
-import { unsubscribe_from_location, update_threshold, use_user } from "../hooks/useUser";
+import { unsubscribe_from_location, update_threshold, use_user, use_user_anomalies } from "../hooks/useUser";
 import { use_location } from "../hooks/useLocations";
 import { subscribe_to_location_request, unsubscribe_from_location_request } from "../services/api/user";
 import { document } from "postcss";
@@ -56,6 +56,9 @@ function UserContent() {
                         <Match when={userPage() == "thresholds"}>
                             <UserThresholds thresholds={userQuery.data.thresholds} />
                         </Match>
+                        <Match when={userPage() == "anomalies"}>
+                            <UserAnomalies />
+                        </Match>
                     </Switch>
                 </Match>
             </Switch>
@@ -109,6 +112,16 @@ function UserSidebar() {
                             <span class="ms-3">Thresholds</span>
                         </a>
                     </li>
+                    <li>
+                        <a href="#" onClick={() => setUserPage("anomalies")} class="
+                                flex items-center p-2 text-gray-900 rounded-lg 
+                                dark:text-white hover:bg-gray-100 
+                                dark:hover:bg-gray-700 group
+                            "
+                        >
+                            <span class="ms-3">Anomalies</span>
+                        </a>
+                    </li>
                 </ul>
             </div>
         </aside>
@@ -123,6 +136,45 @@ function Profile() {
         </div>
     )
 }
+function UserAnomalies() {
+
+    const user_anomalies_query = use_user_anomalies();
+
+    console.log(user_anomalies_query)
+    return (
+        <Switch>
+            <Match when={user_anomalies_query.isSuccess} >
+                <For each={user_anomalies_query.data}>{(anomaly) =>
+                    <div
+                        class="
+                        flex rounded-lg max-w-75 bg-gray-50 border-2 
+                        border-gray-800 m-10 p-5
+                    ">
+                        <div
+                            class="
+                            rounded-md bg-gray-800 w-16 h-16 rotate-45
+                        ">
+                            &nbsp;
+                        </div>
+                        <div
+                            class="
+                            p-5
+                        ">
+                            <p>{anomaly.locationUUID}</p>
+                            <div
+                                class="
+                                flex
+                            ">
+                                
+                            </div>
+                        </div>
+                    </div>
+                }</For>
+            </Match>
+        </Switch>
+    )
+}
+
 interface UserThresholdProps {
     threshold: string;
     value: number;
@@ -146,7 +198,7 @@ function UserThreshold({ threshold, value }: UserThresholdProps) {
                     <input type="range" name={threshold} id={threshold}
                         value={thresholdValue() || 0} min="1" max="100"
                         oninput={(e) => setThresholdValue(parseInt(e.currentTarget.value))}
-                        onchange={() => thresholdMutation.mutate({threshold:threshold, value:thresholdValue()})}
+                        onchange={() => thresholdMutation.mutate({ threshold: threshold, value: thresholdValue() })}
                         class="
                                         block flex-1 border-0 bg-transparent 
                                         py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 
@@ -173,11 +225,11 @@ function UserThresholds({ thresholds }: UserThresholdsProps) {
 
             <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
                 <For each={valueTypes}>{(valueType) =>
-                   <UserThreshold threshold={valueType} value={thresholds[valueType]}/> 
+                    <UserThreshold threshold={valueType} value={thresholds[valueType]} />
                 }</For>
             </div>
             <div class="mt-6 flex items-center justify-end gap-x-6">
-                
+
             </div>
         </div>
     )
