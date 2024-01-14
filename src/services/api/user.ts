@@ -13,6 +13,16 @@ export async function get_user(): Promise<string> {
         return response.data;
     }
 }
+export async function get_user_anomalies(): Promise<string> {
+    const url = `${USERS_URL}/anomalies`;
+    const response = await axios.get(url);
+
+    if(response.status > 299) {
+        throw new Error(`Could Not find User Anomalis, got error code: ${response.status}`);
+    } else {
+        return response.data;
+    }
+}
 export async function subscribe_to_location_request(uuid: string): Promise<string> {
     const url = `${USERS_URL}/subscribe-location/${uuid}`;
     const response = await axios.patch(url);

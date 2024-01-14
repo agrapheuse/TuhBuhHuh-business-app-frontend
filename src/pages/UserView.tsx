@@ -1,5 +1,5 @@
 import { For, Match, Show, Signal, Switch, createContext, createSignal, useContext } from "solid-js";
-import { unsubscribe_from_location, update_threshold, use_user } from "../hooks/useUser";
+import { unsubscribe_from_location, update_threshold, use_user, use_user_anomalies } from "../hooks/useUser";
 import { use_location } from "../hooks/useLocations";
 import { subscribe_to_location_request, unsubscribe_from_location_request } from "../services/api/user";
 import { document } from "postcss";
@@ -61,15 +61,18 @@ function UserContent() {
                             <UserThresholds thresholds={userQuery.data.thresholds} />
                         </Match>
                         <Match when={userPage() == "notifications"}>
-                            <UserNotifications 
+                            <UserNotifications
                                 currentNotifications={userQuery.data.currentNotifications}
                                 predictedNotifications={userQuery.data.predictedNotifications}
                             />
                         </Match>
+                        <Match when={userPage() == "anomalies"}>
+                            <UserAnomalies />
+                        </Match>
                     </Switch>
-                </Match>
-            </Switch>
-        </div>
+                </Match >
+            </Switch >
+        </div >
     )
 }
 
@@ -79,20 +82,20 @@ function UserSidebar() {
     return (
         <aside
             class="
-                    fixed top-50 left-0 z-40 w-64 h-screen 
+                    fixed top-50 left-0 z-40 w-64 h-screen
                     transition-transform-translate-x-full sm:translate-x-0
                 "
             aria-label="Sidebar"
         >
-            <div class="h-full px-3 py-4 overflow-y-auto bg-gray-50 
+            <div class="h-full px-3 py-4 overflow-y-auto bg-gray-50
                     dark:bg-gray-800
                     "
             >
                 <ul class="space-y-2 font-medium">
                     <li>
                         <a href="#" onClick={() => setUserPage("profile")} class="
-                                flex items-center p-2 text-gray-900 rounded-lg 
-                                dark:text-white hover:bg-gray-100 
+                                flex items-center p-2 text-gray-900 rounded-lg
+                                dark:text-white hover:bg-gray-100
                                 dark:hover:bg-gray-700 group
                                 "
                         >
@@ -101,8 +104,8 @@ function UserSidebar() {
                     </li>
                     <li>
                         <a href="#" onClick={() => setUserPage("locations")} class="
-                                flex items-center p-2 text-gray-900 rounded-lg 
-                                dark:text-white hover:bg-gray-100 
+                                flex items-center p-2 text-gray-900 rounded-lg
+                                dark:text-white hover:bg-gray-100
                                 dark:hover:bg-gray-700 group
                             "
                         >
@@ -111,8 +114,8 @@ function UserSidebar() {
                     </li>
                     <li>
                         <a href="#" onClick={() => setUserPage("thresholds")} class="
-                                flex items-center p-2 text-gray-900 rounded-lg 
-                                dark:text-white hover:bg-gray-100 
+                                flex items-center p-2 text-gray-900 rounded-lg
+                                dark:text-white hover:bg-gray-100
                                 dark:hover:bg-gray-700 group
                             "
                         >
@@ -121,12 +124,22 @@ function UserSidebar() {
                     </li>
                     <li>
                         <a href="#" onClick={() => setUserPage("notifications")} class="
-                                flex items-center p-2 text-gray-900 rounded-lg 
-                                dark:text-white hover:bg-gray-100 
+                                flex items-center p-2 text-gray-900 rounded-lg
+                                dark:text-white hover:bg-gray-100
                                 dark:hover:bg-gray-700 group
                             "
                         >
                             <span class="ms-3">Notifications</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" onClick={() => setUserPage("anomalies")} class="
+                                flex items-center p-2 text-gray-900 rounded-lg
+                                dark:text-white hover:bg-gray-100
+                                dark:hover:bg-gray-700 group
+                            "
+                        >
+                            <span class="ms-3">Anomalies</span>
                         </a>
                     </li>
                 </ul>
@@ -134,3 +147,43 @@ function UserSidebar() {
         </aside>
     )
 }
+
+function UserAnomalies() {
+
+    const user_anomalies_query = use_user_anomalies();
+
+    console.log(user_anomalies_query)
+    return (
+        <Switch>
+            <Match when={user_anomalies_query.isSuccess} >
+                <For each={user_anomalies_query.data}>{(anomaly) =>
+                    <div
+                        class="
+                        flex rounded-lg max-w-75 bg-gray-50 border-2
+                        border-gray-800 m-10 p-5
+                    ">
+                        <div
+                            class="
+                            rounded-md bg-gray-800 w-16 h-16 rotate-45
+                        ">
+                            &nbsp;
+                        </div>
+                        <div
+                            class="
+                            p-5
+                        ">
+                            <p>{anomaly.locationUUID}</p>
+                            <div
+                                class="
+                                flex
+                            ">
+
+                            </div>
+                        </div>
+                    </div>
+                }</For>
+            </Match>
+        </Switch>
+    )
+}
+

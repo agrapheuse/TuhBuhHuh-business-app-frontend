@@ -54,21 +54,20 @@ interface SnapshotDataProps {
 }
 
 function SnapshotData({ snapshot_data }: SnapshotDataProps) {
+    console.log(snapshot_data.anomalies)
     return (
         <div>
-            <h1>measurements</h1>
-            <table class="table-auto">
-                <thead>
+            <table class="table-auto w-full">
+                <tbody>
+                    <tr><td colspan="6"><strong>Measurements</strong></td></tr>
                     <tr>
                         <th></th>
-                        <th>Temperature</th>
-                        <th>Humidity</th>
-                        <th>PM10</th>
-                        <th>PM2.5</th>
-                        <th>Ozone</th>
+                        <th class="text-left">Temperature</th>
+                        <th class="text-left">Humidity</th>
+                        <th class="text-left">PM10</th>
+                        <th class="text-left">PM2.5</th>
+                        <th class="text-left">Ozone</th>
                     </tr>
-                </thead>
-                <tbody>
                     <tr>
                         <td>1 Hour ago</td>
                         <td>{parseFloat(snapshot_data.measurements["1hour"].TEMPERATURE).toFixed(2)}</td>
@@ -93,49 +92,57 @@ function SnapshotData({ snapshot_data }: SnapshotDataProps) {
                         <td>{parseFloat(snapshot_data.measurements["3days"].PM25).toFixed(2)}</td>
                         <td>{parseFloat(snapshot_data.measurements["3days"].OZONE).toFixed(2)}</td>
                     </tr>
-                </tbody>
-            </table>
-            <br />
-            <h1>Predictions</h1>
-            <table class="table-auto">
-                <thead>
+                    <tr><td colspan="6"><strong>Predictions</strong></td></tr>
                     <tr>
                         <th></th>
-                        <th>Temperature</th>
-                        <th>Humidity</th>
-                        <th>PM10</th>
-                        <th>PM2.5</th>
-                        <th>Ozone</th>
+                        <th class="text-left">Temperature</th>
+                        <th class="text-left">Humidity</th>
+                        <th class="text-left">PM10</th>
+                        <th class="text-left">PM2.5</th>
+                        <th class="text-left">Ozone</th>
                     </tr>
-                </thead>
-                <tbody>
                     <tr>
                         <td>1 Hour</td>
-                        <td>{snapshot_data.predictions["1hour"].TEMPERATURE}</td>
-                        <td>{snapshot_data.predictions["1hour"].HUMIDITY}</td>
-                        <td>{snapshot_data.predictions["1hour"].PM10}</td>
-                        <td>{snapshot_data.predictions["1hour"].PM25}</td>
-                        <td>{snapshot_data.predictions["1hour"].OZONE}</td>
+                        <td>{parseFloat(snapshot_data.predictions["1hour"].TEMPERATURE).toFixed(2)}</td>
+                        <td>{parseFloat(snapshot_data.predictions["1hour"].HUMIDITY).toFixed(2)}</td>
+                        <td>{parseFloat(snapshot_data.predictions["1hour"].PM10).toFixed(2)}</td>
+                        <td>{parseFloat(snapshot_data.predictions["1hour"].PM25).toFixed(2)}</td>
+                        <td>{parseFloat(snapshot_data.predictions["1hour"].OZONE).toFixed(2)}</td>
                     </tr>
                     <tr>
                         <td>1 Day</td>
-                        <td>{snapshot_data.predictions["1day"].TEMPERATURE}</td>
-                        <td>{snapshot_data.predictions["1day"].HUMIDITY}</td>
-                        <td>{snapshot_data.predictions["1day"].PM10}</td>
-                        <td>{snapshot_data.predictions["1day"].PM25}</td>
-                        <td>{snapshot_data.predictions["1day"].OZONE}</td>
+                        <td>{parseFloat(snapshot_data.predictions["1day"].TEMPERATURE).toFixed(2)}</td>
+                        <td>{parseFloat(snapshot_data.predictions["1day"].HUMIDITY).toFixed(2)}</td>
+                        <td>{parseFloat(snapshot_data.predictions["1day"].PM10).toFixed(2)}</td>
+                        <td>{parseFloat(snapshot_data.predictions["1day"].PM25).toFixed(2)}</td>
+                        <td>{parseFloat(snapshot_data.predictions["1day"].OZONE).toFixed(2)}</td>
                     </tr>
                     <tr>
                         <td>3 Days</td>
-                        <td>{snapshot_data.predictions["3days"].TEMPERATURE}</td>
-                        <td>{snapshot_data.predictions["3days"].HUMIDITY}</td>
-                        <td>{snapshot_data.predictions["3days"].PM10}</td>
-                        <td>{snapshot_data.predictions["3days"].PM25}</td>
-                        <td>{snapshot_data.predictions["3days"].OZONE}</td>
+                        <td>{parseFloat(snapshot_data.predictions["3days"].TEMPERATURE).toFixed(2)}</td>
+                        <td>{parseFloat(snapshot_data.predictions["3days"].HUMIDITY).toFixed(2)}</td>
+                        <td>{parseFloat(snapshot_data.predictions["3days"].PM10).toFixed(2)}</td>
+                        <td>{parseFloat(snapshot_data.predictions["3days"].PM25).toFixed(2)}</td>
+                        <td>{parseFloat(snapshot_data.predictions["3days"].OZONE).toFixed(2)}</td>
                     </tr>
                 </tbody>
             </table>
-        </div>    
+            <h1><strong>Anomalies</strong></h1>
+            <table class="w-full">
+                <tbody>
+                    <tr>
+                        <th class="text-left">Timestamp</th>
+                        <th class="text-left">Type</th>
+                        <th class="text-left">Value</th>
+                    </tr>
+                    <tr>
+                        <td>{snapshot_data.anomalies.timestamp}</td>
+                        <td>{snapshot_data.anomalies.type}</td>
+                        <td>{snapshot_data.anomalies.value}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     );
 }
 

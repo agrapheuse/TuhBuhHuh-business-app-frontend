@@ -1,7 +1,7 @@
 import { useContext } from "solid-js";
 import SecurityContext from "../context/securityContext";
 import { createMutation, createQuery, useQueryClient } from "@tanstack/solid-query";
-import { get_user, subscribe_to_location_request, unsubscribe_from_location_request, update_threshold_request } from "../services/api/user";
+import { get_user, get_user_anomalies, subscribe_to_location_request, unsubscribe_from_location_request, update_threshold_request } from "../services/api/user";
 
 export function use_user() {
     const { is_authenticated } = useContext(SecurityContext);
@@ -10,6 +10,16 @@ export function use_user() {
     return createQuery(() => ({
         queryKey: ['user'],
         queryFn: () =>  get_user(),
+        enabled: is_authenticated(),
+    }));
+}
+export function use_user_anomalies() {
+    const { is_authenticated } = useContext(SecurityContext);
+    const query_client = useQueryClient();;
+
+    return createQuery(() => ({
+        queryKey: ['user_anomalies'],
+        queryFn: () =>  get_user_anomalies(),
         enabled: is_authenticated(),
     }));
 }
