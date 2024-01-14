@@ -71,33 +71,32 @@ function SnapshotData({ snapshot_data }: SnapshotDataProps) {
                 <tbody>
                     <tr>
                         <td>1 Hour ago</td>
-                        <td>{snapshot_data.measurements["1hour"].TEMPERATURE}</td>
-                        <td>{snapshot_data.measurements["1hour"].HUMIDITY}</td>
-                        <td>{snapshot_data.measurements["1hour"].PM10}</td>
-                        <td>{snapshot_data.measurements["1hour"].PM25}</td>
-                        <td>{snapshot_data.measurements["1hour"].OZONE}</td>
+                        <td>{parseFloat(snapshot_data.measurements["1hour"].TEMPERATURE).toFixed(2)}</td>
+                        <td>{parseFloat(snapshot_data.measurements["1hour"].HUMIDITY).toFixed(2)}</td>
+                        <td>{parseFloat(snapshot_data.measurements["1hour"].PM10).toFixed(2)}</td>
+                        <td>{parseFloat(snapshot_data.measurements["1hour"].PM25).toFixed(2)}</td>
+                        <td>{parseFloat(snapshot_data.measurements["1hour"].OZONE).toFixed(2)}</td>
                     </tr>
                     <tr>
                         <td>1 Day ago</td>
-                        <td>{snapshot_data.measurements["1day"].TEMPERATURE}</td>
-                        <td>{snapshot_data.measurements["1day"].HUMIDITY}</td>
-                        <td>{snapshot_data.measurements["1day"].PM10}</td>
-                        <td>{snapshot_data.measurements["1day"].PM25}</td>
-                        <td>{snapshot_data.measurements["1day"].OZONE}</td>
+                        <td>{parseFloat(snapshot_data.measurements["1day"].TEMPERATURE).toFixed(2)}</td>
+                        <td>{parseFloat(snapshot_data.measurements["1day"].HUMIDITY).toFixed(2)}</td>
+                        <td>{parseFloat(snapshot_data.measurements["1day"].PM10).toFixed(2)}</td>
+                        <td>{parseFloat(snapshot_data.measurements["1day"].PM25).toFixed(2)}</td>
+                        <td>{parseFloat(snapshot_data.measurements["1day"].OZONE).toFixed(2)}</td>
                     </tr>
                     <tr>
                         <td>3 Days ago</td>
-                        <td>{snapshot_data.measurements["3days"].TEMPERATURE}</td>
-                        <td>{snapshot_data.measurements["3days"].HUMIDITY}</td>
-                        <td>{snapshot_data.measurements["3days"].PM10}</td>
-                        <td>{snapshot_data.measurements["3days"].PM25}</td>
-                        <td>{snapshot_data.measurements["3days"].OZONE}</td>
+                        <td>{parseFloat(snapshot_data.measurements["3days"].TEMPERATURE).toFixed(2)}</td>
+                        <td>{parseFloat(snapshot_data.measurements["3days"].HUMIDITY).toFixed(2)}</td>
+                        <td>{parseFloat(snapshot_data.measurements["3days"].PM10).toFixed(2)}</td>
+                        <td>{parseFloat(snapshot_data.measurements["3days"].PM25).toFixed(2)}</td>
+                        <td>{parseFloat(snapshot_data.measurements["3days"].OZONE).toFixed(2)}</td>
                     </tr>
                 </tbody>
             </table>
             <br />
             <h1>Predictions</h1>
-            <h2>Todo: currently showing measurements</h2>
             <table class="table-auto">
                 <thead>
                     <tr>
@@ -111,28 +110,28 @@ function SnapshotData({ snapshot_data }: SnapshotDataProps) {
                 </thead>
                 <tbody>
                     <tr>
-                        <td>1 Hour ago</td>
-                        <td>{snapshot_data.measurements["1hour"].TEMPERATURE}</td>
-                        <td>{snapshot_data.measurements["1hour"].HUMIDITY}</td>
-                        <td>{snapshot_data.measurements["1hour"].PM10}</td>
-                        <td>{snapshot_data.measurements["1hour"].PM25}</td>
-                        <td>{snapshot_data.measurements["1hour"].OZONE}</td>
+                        <td>1 Hour</td>
+                        <td>{snapshot_data.predictions["1hour"].TEMPERATURE}</td>
+                        <td>{snapshot_data.predictions["1hour"].HUMIDITY}</td>
+                        <td>{snapshot_data.predictions["1hour"].PM10}</td>
+                        <td>{snapshot_data.predictions["1hour"].PM25}</td>
+                        <td>{snapshot_data.predictions["1hour"].OZONE}</td>
                     </tr>
                     <tr>
-                        <td>1 Day ago</td>
-                        <td>{snapshot_data.measurements["1day"].TEMPERATURE}</td>
-                        <td>{snapshot_data.measurements["1day"].HUMIDITY}</td>
-                        <td>{snapshot_data.measurements["1day"].PM10}</td>
-                        <td>{snapshot_data.measurements["1day"].PM25}</td>
-                        <td>{snapshot_data.measurements["1day"].OZONE}</td>
+                        <td>1 Day</td>
+                        <td>{snapshot_data.predictions["1day"].TEMPERATURE}</td>
+                        <td>{snapshot_data.predictions["1day"].HUMIDITY}</td>
+                        <td>{snapshot_data.predictions["1day"].PM10}</td>
+                        <td>{snapshot_data.predictions["1day"].PM25}</td>
+                        <td>{snapshot_data.predictions["1day"].OZONE}</td>
                     </tr>
                     <tr>
-                        <td>3 Days ago</td>
-                        <td>{snapshot_data.measurements["3days"].TEMPERATURE}</td>
-                        <td>{snapshot_data.measurements["3days"].HUMIDITY}</td>
-                        <td>{snapshot_data.measurements["3days"].PM10}</td>
-                        <td>{snapshot_data.measurements["3days"].PM25}</td>
-                        <td>{snapshot_data.measurements["3days"].OZONE}</td>
+                        <td>3 Days</td>
+                        <td>{snapshot_data.predictions["3days"].TEMPERATURE}</td>
+                        <td>{snapshot_data.predictions["3days"].HUMIDITY}</td>
+                        <td>{snapshot_data.predictions["3days"].PM10}</td>
+                        <td>{snapshot_data.predictions["3days"].PM25}</td>
+                        <td>{snapshot_data.predictions["3days"].OZONE}</td>
                     </tr>
                 </tbody>
             </table>
