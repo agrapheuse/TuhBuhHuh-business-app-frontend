@@ -29,17 +29,21 @@ export function UserNotifications({
 		<>
 			<div class="flex justify-evenly content-strech">
 				<div
-                    class="rounded-md p-2 m-2"
-                    classList={{"bg-gray-50 dark:bg-gray-800 text-white": show_current_data()}}
-                >
+					class="rounded-md p-2 m-2"
+					classList={{
+						"bg-gray-50 dark:bg-gray-800 text-white": show_current_data(),
+					}}
+				>
 					<button onclick={() => set_show_current_data(true)}>
 						Show current data notifications
 					</button>
 				</div>
-				<div 
-                    class="rounded-md p-2 m-2"
-                    classList={{"bg-gray-50 dark:bg-gray-800 text-white": !show_current_data()}}
-                >
+				<div
+					class="rounded-md p-2 m-2"
+					classList={{
+						"bg-gray-50 dark:bg-gray-800 text-white": !show_current_data(),
+					}}
+				>
 					<button onclick={() => set_show_current_data(false)}>
 						Show predicted data notifications
 					</button>
@@ -60,19 +64,31 @@ export function UserNotifications({
 }
 
 function NotificationList({ notificationList }) {
+	const entries = Object.entries(notificationList);
+
+	let all_empty = true;
+	for (const entry in entries) {
+		if (entry[1] != null) {
+			all_empty = false;
+		}
+	}
+
 	return (
 		<>
-			<div>notifications</div>
-			<For
-				each={Object.entries(notificationList)}
-				fallback={<UserNotificationsEmpty />}
-			>
-				{(item, index) => {
-					<div data-index={index()}>
-						<TypeNotification item={item} />
-					</div>;
-				}}
-			</For>
+			<Switch>
+                <Match when={all_empty}>
+                    <UserNotificationsEmpty />
+                </Match>
+				<Match when={!all_empty}>
+					<For each={entries} fallback={<UserNotificationsEmpty />}>
+						{(item, index) => {
+							<div data-index={index()}>
+								<TypeNotification item={item} />
+							</div>;
+						}}
+					</For>
+				</Match>
+			</Switch>
 		</>
 	);
 }
